@@ -7,6 +7,7 @@
 	let inputText = $state('');
 	let isLoading = $state(false);
 	let selectedVoice = $state('af_heart');
+	let audioElement: null | HTMLAudioElement = $state(null);
 
 	onMount(async () => {
 		worker = new Worker(new URL('../lib/worker.js', import.meta.url), { type: 'module' });
@@ -26,6 +27,11 @@
 					id,
 					name
 				}));
+
+				// List of good voices to filter
+				const goodVoices = ['af_heart', 'af_bella', 'bf_emma', 'am_michael'];
+				voices = voices.filter((voice) => goodVoices.includes(voice.id));
+
 				console.log('Model loaded');
 				break;
 			case 'error':
@@ -36,6 +42,13 @@
 				const { audio, text } = event.data;
 				audioSource = audio;
 				isLoading = false;
+
+				// Play audio once generated
+				setTimeout(() => {
+					if (audioElement) {
+						audioElement.play().catch((err) => console.error('Failed to autoplay audio:', err));
+					}
+				}, 100);
 				break;
 		}
 	}
@@ -61,9 +74,10 @@
 
 <main class="mx-auto max-w-3xl p-8">
 	<h1 class="mb-2 text-center text-4xl text-gray-800">Text-to-Speech</h1>
-	<p class="mb-8 text-center text-gray-600">
+	<p class="text-center text-gray-600">
 		Transform your text into natural-sounding speech, right in your browser!
 	</p>
+	<p class="mb-8 text-center text-gray-600">Only Chrome is currently supported.</p>
 
 	<form onsubmit={handleSubmit} class="flex flex-col gap-6 rounded-lg bg-white p-8 shadow-sm">
 		<div class="flex flex-col gap-2">
@@ -85,7 +99,10 @@
 				class="w-full rounded-md border border-gray-200 p-3 text-base focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none"
 			>
 				{#each voices as voice}
-					<option value={voice.id}>{voice.name.name} - {voice.name.gender}</option>
+					<option value={voice.id}
+						>{voice.name.name} ({voice.name.language === 'en-us' ? 'American' : 'British'}) - {voice
+							.name.gender}</option
+					>
 				{/each}
 			</select>
 		</div>
@@ -101,7 +118,7 @@
 
 	{#if audioSource}
 		<div class="mt-8">
-			<audio controls src={audioSource} class="w-full"></audio>
+			<audio bind:this={audioElement} controls src={audioSource} class="w-full"></audio>
 		</div>
 	{/if}
 </main>
