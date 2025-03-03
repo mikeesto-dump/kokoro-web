@@ -76,7 +76,7 @@
 <main class="mx-auto max-w-3xl p-8">
 	<h1 class="mb-2 text-center text-4xl text-gray-800">Text-to-Speech</h1>
 	<p class="text-center text-gray-600">
-		Transform your text into natural-sounding speech, right in your browser!
+		Transform text into natural-sounding speech, right in your browser!
 	</p>
 	<p class="mb-8 text-center text-gray-600">Only Chrome is currently supported.</p>
 
