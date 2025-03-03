@@ -1,3 +1,3 @@
-# Kokoko TTS (Web)
+# Kokoro TTS (Web)
 
-Text-to-speech generated locally in your browser. Using Svelte, [Kokoko.js](https://github.com/hexgrad/kokoro/tree/main/kokoro.js) and Transformer.js.
+Text-to-speech generated locally in your browser. Using Svelte, [Kokoro.js](https://github.com/hexgrad/kokoro/tree/main/kokoro.js) and Transformer.js.
